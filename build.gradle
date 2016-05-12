@@ -16,12 +16,17 @@ buildscript {
 apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'idea'
-apply plugin: 'spring-boot' 
+apply plugin: 'maven-publish'
+apply plugin: 'spring-boot'
+
+def releaseName = 'fd-highgo-cart'
+def releaseVersion = '0.0.1-SNAPSHOT'
 
 jar {
-	baseName = 'fd-highgo-cart'
-	version = '0.0.1-SNAPSHOT'
+	baseName = releaseName
+	version = releaseVersion
 }
+
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
@@ -31,6 +36,53 @@ repositories {
 	mavenCentral()
 }
 
+task releaseJar(type: Jar) {
+	baseName releaseName
+	from sourceSets.main.output
+	exclude "**/demo/**", "**/*.yml", "**/*.xml", "**/*.sql"
+	manifest {
+		attributes(
+				"Created-By" : "${System.getProperty('java.version')} (${System.getProperty('java.specification.vendor')})",
+				"Implementation-Version" : releaseVersion
+		)
+	}
+}
+
+publishing {
+	publications {
+		maven(MavenPublication) {
+			groupId "com.jyall"
+			artifactId releaseName
+			version releaseVersion
+			from components.java
+			artifacts.clear()
+
+			artifacts = [releaseJar]
+		}
+
+		all {
+			pom.withXml {
+				asNode().dependencies."*".findAll() {
+					it.scope.text() == "runtime" && project.configurations.compile.allDependencies.find { dep ->
+						dep.name == it.artifactId.text()
+					}
+				}.each {
+					it.scope*.value = "compile"
+				}
+			}
+		}
+	}
+
+	repositories {
+		maven {
+			url "${jyallRepoBase}/repositories/jsjy-${releaseVersion.endsWith('-SNAPSHOT') ? 'snapshot' : 'release' }"
+			credentials {
+				username = "deploy"
+				password = "eBbef58C"
+			}
+		}
+	}
+}
 
 dependencies {
 	compile('org.springframework.boot:spring-boot-starter')
@@ -53,3 +105,4 @@ eclipse {
 		 containers 'org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8'
 	}
 }
+apply plugin: 'maven'
