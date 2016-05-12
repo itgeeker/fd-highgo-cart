@@ -1,5 +1,6 @@
 package me.highgo.cart.domain;
 
+import com.wordnik.swagger.annotations.ApiModel;
 import com.wordnik.swagger.annotations.ApiModelProperty;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.data.annotation.Transient;
@@ -13,6 +14,7 @@ import java.math.BigDecimal;
  * @Author huangzhiwei
  * @DATE 2016/5/12
  */
+@ApiModel(value = "GoodsItem",description = "单品购物项信息")
 public class GoodsItem extends Item {
 
     @ApiModelProperty(value = "商品id")

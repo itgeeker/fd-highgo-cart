@@ -1,5 +1,6 @@
 package me.highgo.cart.domain;
 
+import com.wordnik.swagger.annotations.ApiModel;
 import com.wordnik.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
@@ -14,6 +15,7 @@ import java.util.List;
  * @Author huangzhiwei
  * @DATE 2016/5/12
  */
+@ApiModel(value = "SuitItem",description = "套装购物项信息")
 public class SuitItem extends Item implements Serializable{
 
     @ApiModelProperty(value = "套装ID",notes = "套装的唯一标识")

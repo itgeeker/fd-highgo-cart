@@ -2,6 +2,7 @@ package me.highgo.cart.domain;
 
 import com.jyall.exception.ErrorCode;
 import com.jyall.exception.JyBizException;
+import com.wordnik.swagger.annotations.ApiModel;
 import com.wordnik.swagger.annotations.ApiModelProperty;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
@@ -18,6 +19,7 @@ import java.util.List;
  * @Author huangzhiwei
  * @DATE 2016/5/12
  */
+@ApiModel(value = "Cart",description = "购物车信息")
 public class Cart implements Serializable{
 
     @ApiModelProperty(value = "购物项的最大容量")
